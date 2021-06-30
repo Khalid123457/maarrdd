@@ -1,0 +1,280 @@
+import requests
+import argparse
+from colorama import Fore
+import time
+red_color = "\033[1;31m"
+green_color = "\033[1;32m"
+
+
+
+
+
+rs = requests.session()
+parser = argparse.ArgumentParser()
+parser.add_argument ('-u', action="store",dest='username',help="almaha.am1")
+parser.add_argument ('-p', action="store",dest='password',help="")
+parser.add_argument ('-s', action="store",dest='user',help="")
+parser.add_argument ('-t', action="store",dest='text',help="")
+parser.add_argument ('-c', action="store",dest='code',help="")
+
+args=parser.parse_args ()
+
+
+print("")
+url = 'https://www.instagram.com/accounts/login/ajax/'
+headers = {
+    'accept': '*/*',
+    'accept-encoding': 'gzip, deflate, br',
+    'accept-language': 'en-US,en;q=0.9',
+    'content-length': '275',
+    'content-type': 'application/x-www-form-urlencoded',
+    'cookie': 'ig_did=303991DA-0420-41AC-A26D-D9F27C8DF624; mid=YMdanwAEAAHbGwbzL3d_mjVac16b; rur=ASH; csrftoken=voNeU14Q1AMv8Sg3TtyFW2KA2UkSJlpL; urlgen="{\"185.88.26.35\": 201031}:1kC1CG:D41DVXmf-j-T5nYho3c7g7K3MQU"',
+    'origin': 'https://www.instagram.com',
+    'referer': 'https://www.instagram.com/',
+    'sec-fetch-dest': 'empty',
+    'sec-fetch-mode': 'cors',
+    'sec-fetch-site': 'same-origin',
+    'user-agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.135 Safari/537.36',
+    'x-csrftoken': 'voNeU14Q1AMv8Sg3TtyFW2KA2UkSJlpL',
+    'x-ig-app-id': '936619743392459',
+    'x-ig-www-claim': 'hmac.AR3tv9HzzLkZIUlGMRu3lzHfEeePw9CgWg8cuXGO22LfU8x0',
+    'x-instagram-ajax': '0c15f4d7d44a',
+    'x-requested-with': 'XMLHttpRequest'
+}
+data = {
+    'username': f'{args.username}',
+    'enc_password': f'#PWD_INSTAGRAM_BROWSER:0:1589682409:{args.password}',
+    'queryParams': '{}',
+    'optIntoOneTap': 'false'
+}
+
+r = rs.post(url, headers=headers, data=data)
+if 'authenticated":true' in r.text:
+    re = r.cookies["sessionid"]
+    print(green_color+"Login √ ")
+    with open('sessionid.txt', 'a') as x:
+        x.write(re + '\n')
+
+else:
+    print(red_color+"Error Login")
+    print('')
+    exit()
+
+print("""
+
+1- Comment on Post 
+2- Many messages Post
+3- Bot messages 
+4- Following - soon
+5- Cancellation Following soon
+
+
+
+""")
+
+
+Bot = input(red_color+'hat@rpr~: ')
+mss = input('Your message for an automated response to your followers : ')
+url = "https://www.instagram.com/web/search/topsearch/?context=blended&query="+args.user+"&rank_token=0.7340130915338523&include_reel=true"
+payload = ""
+headers = {
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:84.0) Gecko/20100101 Firefox/84.0",
+        "Connection": "close",
+        "Host": "www.instagram.com",
+        "Accept-Encoding": "gzip, deflate",
+        "Cache-Control": "max-age=0",
+        "Cookie":"tt_webid_v2=6914693436357379585"
+
+    }
+
+response = requests.request ("GET", url, data=payload, headers=headers)
+post = str (response.json ()["users"][0]["user"]["pk"])
+post1 = str (response.json ()["users"][0]["user"]["username"])
+
+
+print ("")
+print (green_color+" -" * 15)
+print ("")
+print ('name : ', post1)
+
+if Bot =="1":
+    url = 'https://www.instagram.com/graphql/query/?query_hash=2c4c2e343a8f64c625ba02b2aa12c7f8&variables=%7B%22shortcode%22%3A%22'+args.code+'%22%2C%22child_comment_count%22%3A3%2C%22fetch_comment_count%22%3A40%2C%22parent_comment_count%22%3A24%2C%22has_threaded_comments%22%3Atrue%7D'
+    headers = {
+    'Host': 'www.instagram.com',
+    'accept-Encoding': 'gzip, deflate',
+    'referer': 'https://www.instagram.com/',
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36'
+}
+
+    Cookies = {'sessionid': re}
+    data = {}
+    response = requests.request("GET",url, headers=headers, data=data, cookies=Cookies)
+    post = str(response.json()["data"]["shortcode_media"]["id"])
+    print("")
+    print(" -" * 15)
+    print("")
+    print('https://www.instagram.com/p/'+args.code+'')
+
+    #Bot1 = input(red_color+'hat@rpr~: ')
+    print('')
+    url = 'https://www.instagram.com/web/comments/'+post+'/add/'
+    headers = {
+    'Host': 'www.instagram.com',
+    'accept-Encoding': 'gzip, deflate',
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'referer': 'https://www.instagram.com/',
+    'X-CSRFToken': 'asqdHUu9JD010RM1X9SLfy85eTKjIdlC',
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36'
+}
+
+    Cookies = {'sessionid': re}
+    data = 'comment_text='+ args.text+''
+    response = requests.request("POST",url, headers=headers, data=data, cookies=Cookies)
+    if 'status' in response.text:
+        print('ok message ~ ',args.text)
+
+        print("")
+        print(" -" * 15)
+        print("")
+    elif "message" in response.text:
+        print(Fore.RED + "[Error message] ",args.text)
+        exit()
+
+
+
+
+def reaper():
+ if Bot =="3":
+    url11 = 'https://www.instagram.com/graphql/query/?query_hash=2c4c2e343a8f64c625ba02b2aa12c7f8&variables=%7B%22shortcode%22%3A%22' + args.code + '%22%2C%22child_comment_count%22%3A3%2C%22fetch_comment_count%22%3A40%2C%22parent_comment_count%22%3A24%2C%22has_threaded_comments%22%3Atrue%7D'
+    headers = {
+         'Host': 'www.instagram.com',
+         'accept-Encoding': 'gzip, deflate',
+         'referer': 'https://www.instagram.com/',
+         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36'
+     }
+
+    Cookies = {'sessionid': re}
+    data = {}
+    response = requests.request("GET", url11, headers=headers, data=data, cookies=Cookies)
+    post756 = str(response.json()["data"]["shortcode_media"]["id"])
+
+
+    url = 'https://i.instagram.com/api/v1/media/'+post756+'/comments/?can_support_threading=true'
+    headers = {
+        'Host': 'i.instagram.com',
+        'accept-Encoding': 'gzip, deflate',
+        'referer': 'https://www.instagram.com/',
+        'user-agent': 'Instagram 159.0.0.28.123 (iPhone9,3; iOS 13_5_1; en_SA@calendar=gregorian; ar-SA; scale=2.00; 750x1334; 244425769) AppleWebKit/420+'
+    }
+    Cookies = {'sessionid': re}
+    data = {}
+    response = requests.request("GET", url, headers=headers, data=data, cookies=Cookies)
+    post8 = str(response.json()["comments"])
+    post90 = str(response.json()["comments"][0]["user"]["username"])
+    post91 = str(response.json()["comments"][1]["user"]["username"])
+    if ''+ args.username +'' in post8:
+        print('ok')
+        ssssa = '@'+ post90 + ' ' +'@' +  post91 + ' ' + mss+''
+        url = 'https://www.instagram.com/graphql/query/?query_hash=2c4c2e343a8f64c625ba02b2aa12c7f8&variables=%7B%22shortcode%22%3A%22' + args.code + '%22%2C%22child_comment_count%22%3A3%2C%22fetch_comment_count%22%3A40%2C%22parent_comment_count%22%3A24%2C%22has_threaded_comments%22%3Atrue%7D'
+        headers = {
+            'Host': 'www.instagram.com',
+            'accept-Encoding': 'gzip, deflate',
+            'referer': 'https://www.instagram.com/',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36'
+        }
+
+        Cookies = {'sessionid': re}
+        data = {}
+        response = requests.request("GET", url, headers=headers, data=data, cookies=Cookies)
+        post = str(response.json()["data"]["shortcode_media"]["id"])
+        print("")
+        print(" -" * 15)
+        print("")
+        print('https://www.instagram.com/p/' + args.code + '')
+
+        # Bot1 = input(red_color+'hat@rpr~: ')
+        print('')
+        url = 'https://www.instagram.com/web/comments/' + post + '/add/'
+        headers = {
+            'Host': 'www.instagram.com',
+            'accept-Encoding': 'gzip, deflate',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'referer': 'https://www.instagram.com/',
+            'X-CSRFToken': 'asqdHUu9JD010RM1X9SLfy85eTKjIdlC',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36'
+        }
+
+        Cookies = {'sessionid': re}
+        data = 'comment_text='+ ssssa + ''
+        response = requests.request("POST", url, headers=headers, data=data, cookies=Cookies)
+        if 'status' in response.text:
+            print(" -" * 15)
+            print("")
+        elif "message" in response.text:
+            print(Fore.RED + "[Error message] ")
+
+
+
+
+
+
+def reaper2():
+ if Bot =="2":
+    url = 'https://www.instagram.com/graphql/query/?query_hash=2c4c2e343a8f64c625ba02b2aa12c7f8&variables=%7B%22shortcode%22%3A%22'+args.code+'%22%2C%22child_comment_count%22%3A3%2C%22fetch_comment_count%22%3A40%2C%22parent_comment_count%22%3A24%2C%22has_threaded_comments%22%3Atrue%7D'
+    headers = {
+    'Host': 'www.instagram.com',
+    'accept-Encoding': 'gzip, deflate',
+    'referer': 'https://www.instagram.com/',
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36'
+}
+
+    Cookies = {'sessionid': re}
+    data = {}
+    response = requests.request("GET",url, headers=headers, data=data, cookies=Cookies)
+    post = str(response.json()["data"]["shortcode_media"]["id"])
+    print("")
+    print(" -" * 15)
+    print("")
+    print('https://www.instagram.com/p/'+args.code+'')
+    print('''
+          
+          Sending .. 
+          sleep (10) seconds
+          
+          ''')
+   
+    print('')
+    dd = ""+args.text+""
+    url = 'https://www.instagram.com/web/comments/'+post+'/add/'
+    headers = {
+    'Host': 'www.instagram.com',
+    'accept-Encoding': 'gzip, deflate',
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'Accept-Language': 'ar,en-US;q=0.9,en;q=0.8',
+    'referer': 'https://www.instagram.com/',
+    'X-CSRFToken': 'asqdHUu9JD010RM1X9SLfy85eTKjIdlC',
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36'
+}
+
+    Cookies = {'sessionid': re}
+    data = 'comment_text='+ dd +''
+    response = requests.request("POST",url, headers=headers, data=data, cookies=Cookies)
+    if 'status' in response.text:
+        print('ok  ~ ',dd)
+
+        print(green_color+"")
+        print(" -" * 15)
+        print('https://www.instagram.com/p/' + args.code + '')
+        print("")
+    elif "message" in response.text:
+        print(Fore.RED + "[Error message] ",args.text)
+
+
+
+
+
+while True:
+ start = reaper()
+ start = reaper2()
+ time.sleep(30)
